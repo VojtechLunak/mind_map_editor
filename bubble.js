@@ -3,6 +3,7 @@
  * @class Bubble handles html interaction - doubleclick, click - and movement via Drag&Drop funcionality.
  */
 export default class Bubble {
+    //is the group containing ellipse and text svg
     _bubble_elm;
     _text_elm;
     _selected;
@@ -117,6 +118,15 @@ class BubbleManager {
 
     get() {
         return this._bubbles;
+    }
+
+    getFirstAvailableId() {
+        let tempMax = 1;
+        this._bubbles.forEach(bubble => {
+            if (parseInt(bubble.id.substring(3)) > tempMax)
+                tempMax = parseInt(bubble.id.substring(3));
+        })
+        return tempMax + 1;
     }
 
     getSelectedBubble() {

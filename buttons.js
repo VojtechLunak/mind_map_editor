@@ -1,9 +1,15 @@
-import { Canvg } from 'https://cdn.skypack.dev/canvg';
+let Canvg;
+//check internet connection and imports
+import('https://cdn.skypack.dev/canvg')
+    .then(module => Canvg = module.Canvg)
+    .catch(err => alert("You have no internet connection. Please connect at least once and refresh the page, to use the application fully (download your mind map)."));
 
 let idCounter = 1;
 let actionInProgress = false;
 let infoSelected = false;
 let exportSelected = false;
+
+export function setCounter(count) { idCounter = count;}
 
 /**
  * @class Button has button property and _onClick base method.
@@ -44,16 +50,28 @@ class ExportButton extends Button {
 
         let popup = document.getElementById("placeholder");
         if (popup.innerHTML === "") {       
-            this._btn_elm.style.backgroundColor = "lightgreen";
             exportSelected = true;
+            document.querySelectorAll("nav button").forEach(b => b.classList.remove("activeText"));
+            document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
+            document.querySelector("aside").classList.add("hiddenUnder");
+            this._btn_elm.classList.add("activeText");
             popup.innerHTML = this._export_hmtl_text;
         } else {
             if (infoSelected) {
-                document.getElementById("info_btn").style.backgroundColor = "";
+                infoSelected = false;
+                exportSelected = true;
+                document.querySelectorAll("nav button").forEach(b => b.classList.remove("activeText"));
+                document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
+                document.querySelector("aside").classList.add("hiddenUnder");
+                this._btn_elm.classList.add("activeText");
+                popup.innerHTML = this._export_hmtl_text;
+            } else if (exportSelected) {
+                popup.innerHTML = "";
+                exportSelected = false;
+                this._btn_elm.classList.remove("activeText");
+                document.querySelectorAll("button").forEach(b => b.classList.remove("lower"));
+                document.querySelector("aside").classList.remove("hiddenUnder");
             }
-            this._btn_elm.style.backgroundColor = "";
-            popup.innerHTML = "";
-            exportSelected = false;
         }       
        
         const button = document.getElementById("download_btn");
@@ -63,13 +81,23 @@ class ExportButton extends Button {
     }
 
     _handleDownloadButtonClick = (e) => {
-        //using library canvg to create canvas from svg and then export it to png/jpg.
+        super._onClick(e);
+
+        if (!Canvg) {
+            if (navigator.onLine) {
+                import('https://cdn.skypack.dev/canvg').then(module => Canvg = module.Canvg).catch(err => console.log(err));
+            } else
+                return;
+        }
+        //using library canvg to create canvas from svg and then export that canvas to png/jpg.
         const canvas = document.createElement('canvas');
         canvas.style.visibility = "hidden";
+        canvas.width = 1920;
+        canvas.height = 1080;
         const ctx = canvas.getContext('2d');
 
         let v = Canvg.fromString(ctx, document.getElementById('svg').outerHTML); 
-        v.start();
+        v.start();        
 
         const now = new Date();
         const offsetMs = now.getTimezoneOffset() * 60 * 1000;
@@ -111,6 +139,8 @@ class InfoButton extends Button {
     <i><u>usage:</u> click button with given funcionality, then select base bubble and then final bubble (if possible), or click somewhere else in the editor to reset;
     <br>
     to add text to bubble, double click it to show input field in the left menu; there you write your text and submit it with the Set text button
+    <br>
+    click save button to save your current mind map; when you come back later or refresh the page, you will see your last local save
     </i></p>`;
 
     constructor(buttonId) {
@@ -118,22 +148,37 @@ class InfoButton extends Button {
         this._btn_elm.addEventListener('click', this._onClick);
     }
 
-    _onClick = e => {
-        super._onClick(e);
+    _onClick = e => {      
+        e.preventDefault();
 
         let popup = document.getElementById("placeholder");
         if (popup.innerHTML === "") {
-            this._btn_elm.style.backgroundColor = "lightgreen";
-
             infoSelected = true;
             popup.innerHTML = this._info_hmtl_text;
+            document.querySelectorAll("nav button").forEach(b => b.classList.remove("activeText"));            
+            document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
+            document.querySelector("aside").classList.add("hiddenUnder");
+            document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
+            this._btn_elm.classList.add("activeText");
         } else {
-            this._btn_elm.style.backgroundColor = "";
             if (exportSelected) {
-                document.getElementById("export").style.backgroundColor = "";
+                exportSelected = false;
+                popup.innerHTML = this._info_hmtl_text;
+                infoSelected = true;
+                document.querySelectorAll("nav button").forEach(b => b.classList.remove("activeText"));
+                document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
+                document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
+                document.querySelector("aside").classList.add("hiddenUnder");
+                this._btn_elm.classList.add("activeText");
             }
-            popup.innerHTML = "";
-            infoSelected = false;
+            else if (infoSelected) {
+                popup.innerHTML = "";
+                infoSelected = false;
+                this._btn_elm.classList.remove("activeText");
+                document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
+                document.querySelectorAll("button").forEach(b => b.classList.remove("lower"));
+                document.querySelector("aside").classList.remove("hiddenUnder");
+            }            
         }
     }
 }
@@ -402,6 +447,12 @@ class CreateLineButton extends BubbleManagingButton {
 
 export function initCreateLineButton(buttonId, lineGenerator, bubbleManager) {return new CreateLineButton(buttonId, lineGenerator, bubbleManager)}
 
+
+/**
+ * @class DeleteLineButton represents all interactivity a logic for deleting line between two bubbles. 
+ * @extends BubbleManagingButton because it needs the access to bubble "database".
+ * @constructor Takes also LineGenerator as argument, in order to execute line logic.
+ */
 class DeleteLineButton extends BubbleManagingButton {
     _lineGenerator;
     _firstSelectedBubble;
@@ -493,3 +544,23 @@ const playError = (e) => {
 }
 
 export function initDeleteLineButton(buttonId, lineGenerator, bubbleManager) {return new DeleteLineButton(buttonId, lineGenerator, bubbleManager)};
+
+/**
+ * @class SaveButton represents all interactivity a logic for saving svg innerHTML to local storage for later loading. 
+ */
+class SaveButton extends Button {
+    constructor(buttonId) {
+        super(buttonId);
+        this._btn_elm.addEventListener('click', this._onClick);        
+    }
+
+    _onClick = e => {
+        super._onClick(e);
+
+        localStorage.removeItem("save");
+        localStorage.setItem("save", document.getElementById("svg").innerHTML);
+        console.log("saved mind map");
+    }
+}
+
+export function initSaveButton(buttonId) {return new SaveButton(buttonId)};

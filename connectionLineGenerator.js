@@ -155,7 +155,8 @@ class Line {
 
         this._line_html = `<line id="${this._line_id}" x1="${x1}" x2="${x2}" y1="${y1}" y2="${y2}"
              stroke="black" stroke-width="3"/>`;
-        this._bubble2.element.insertAdjacentHTML('afterend', this._line_html);
+        //this._bubble2.element.insertAdjacentHTML('afterend', this._line_html);
+        document.getElementById(this._bubble2.id).insertAdjacentHTML('afterend', this._line_html);
     }
 
     getHTML() {
@@ -168,6 +169,8 @@ class Line {
     get bubble1() {return this._bubble1}
     get bubble2() {return this._bubble2}
 }
+
+import { setCounter } from './buttons.js';
 
 /**
  * @class LineGenerator handles all logic regarding line management.
@@ -199,9 +202,28 @@ class LineGenerator {
             }
             return false;
         })) {
-            let line = new Line(b1, b2);
+            const line = new Line(b1, b2);
             this._lines.push(line);
         }
+    }
+
+    loadSave() {        
+        const bubbleGroups = document.querySelectorAll('g');
+
+        bubbleGroups.forEach(group => {
+            this._bubbleManager.add(group);            
+        });
+
+        setCounter(this._bubbleManager.getFirstAvailableId());
+
+        bubbleGroups.forEach(group => {
+            if (group.querySelector('line')) {
+                const line = group.querySelector('line');
+                const id1 = line.getAttribute('id').split('-')[0];
+                const id2 = line.getAttribute('id').split('-')[1];                
+                this.addLineBetween(id1, id2);
+            }            
+        });
     }
 
     render() {

@@ -15,23 +15,24 @@
         <header>
             Mind map editor - KAJ project
         </header>
-        <button id="export">Export</button>
-        <button id="info_btn">Info</button>
+        <button id="export" title="Simple export menu. Allows you to select image type (png/jpg).">Export</button>
+        <button id="info_btn" title="Instructions.">Info</button>
+        <button id="save_btn" title="Save current mind map for later use.">Save</button>
         <div id="placeholder"></div>
     </nav>
     <aside>
-        <button id="add_bubble">Add bubble</button> <br>
-        <button id="remove_all">Remove all bubbles</button> <br>
-        <button id="remove_bubble">Remove bubble</button> <br>
-        <button id="create_line">Create line</button> <br>
-        <button id="delete_line">Delete line</button>
+        <button id="add_bubble" title="Generate new bubble in the editor plane.">Add bubble</button> <br>
+        <button id="remove_all" title="Remove all bubbles. Your last save is still available.">Remove all bubbles</button> <br>
+        <button id="remove_bubble" title="Remove bubble and corresponding lines.">Remove bubble</button> <br>
+        <button id="create_line" title="Select two bubbles to connect with line.">Create line</button> <br>
+        <button id="delete_line" title="Select two bubbles to disconnect.">Delete line</button>
         <br>        
         <input id="text_input" type="text" class="hidden"/>
         <br> 
-        <button id="set_text" class="hidden">Set text</button>
+        <button id="set_text" class="hidden" title="Sets the text in from the input to the selected bubble.">Set text</button>
     </aside>
     <div id="svg_container">
-    <svg id="svg" width="1500" height="755" xmlns="http://www.w3.org/2000/svg">
+    <svg id="svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
                 <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5" opacity="0.35"/>

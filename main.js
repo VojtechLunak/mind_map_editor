@@ -1,30 +1,26 @@
 import { initBubbleManager } from "./bubble.js";
+import { initLineGenerator } from "./connectionLineGenerator.js";
+import { initInfoButton, initAddBubbleButton,
+  initRemoveAllBubblesButton,
+ initCreateLineButton, 
+ initRemoveBubbleButton,
+ initDeleteLineButton,
+ initExportButton,
+ initSetTextButton,
+ initSaveButton} from "./buttons.js";
+import { initDragManager } from "./drag.js";
+
 
 const bubbleManager = initBubbleManager();
-
-import { initLineGenerator } from "./connectionLineGenerator.js";
-
 const lineGenerator = initLineGenerator(bubbleManager);
-let ecl1 = document.getElementById("bubble1");
-let ecl2 = document.getElementById("bubble2");
-bubbleManager.add(ecl1, ecl2);
 
-if (navigator.onLine) {
-    console.log('online');
-  } else {
-    console.log('offline');
-  }
+if (window.navigator.onLine) {
+  console.log('online');
+} else {
+  console.log('offline');
+}
 
-//lineGenerator.addLineBetween(ecl1.getAttribute('id'), ecl2.getAttribute('id'));
-
-import { initInfoButton, initAddBubbleButton,
-     initRemoveAllBubblesButton,
-    initCreateLineButton, 
-    initRemoveBubbleButton,
-    initDeleteLineButton,
-    initExportButton,
-    initSetTextButton} from "./buttons.js";
-
+// Button logic initialization
 initInfoButton("info_btn");
 initExportButton("export");
 initAddBubbleButton("add_bubble", bubbleManager);
@@ -33,15 +29,24 @@ initRemoveBubbleButton('remove_bubble', lineGenerator, bubbleManager);
 initCreateLineButton("create_line", lineGenerator, bubbleManager);
 initDeleteLineButton("delete_line", lineGenerator, bubbleManager);
 initSetTextButton("set_text", bubbleManager);
+initSaveButton("save_btn");
 
+// Checking for save
+if(localStorage.getItem('save')) {  
+  document.getElementById("svg").innerHTML = localStorage.getItem("save");
+  lineGenerator.loadSave();
+  console.log("save loaded");
+}
+
+// Initial preparation
 document.querySelector("svg").addEventListener('click', bubbleManager.unselectAll);
 
+window.onbeforeunload = (e) => { 
+  if (localStorage.getItem('save') == document.getElementById("svg").innerHTML) {
+    e.preventDefault();
+    return;
+  }
+  return 'Please save your work before leaving the page.';
+}
 
-
-
-
-//import { initMoveBubble } from "./move.js";
-//initMoveBubble(lineGenerator);
-
-import { initDragManager } from "./drag.js";
 initDragManager(lineGenerator, bubbleManager);
