@@ -155,8 +155,7 @@ class Line {
 
         this._line_html = `<line id="${this._line_id}" x1="${x1}" x2="${x2}" y1="${y1}" y2="${y2}"
              stroke="black" stroke-width="3"/>`;
-        //this._bubble2.element.insertAdjacentHTML('afterend', this._line_html);
-        document.getElementById(this._bubble2.id).insertAdjacentHTML('afterend', this._line_html);
+        this._bubble2.element.insertAdjacentHTML('afterend', this._line_html);
     }
 
     getHTML() {

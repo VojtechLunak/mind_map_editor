@@ -92,8 +92,8 @@ class ExportButton extends Button {
         //using library canvg to create canvas from svg and then export that canvas to png/jpg.
         const canvas = document.createElement('canvas');
         canvas.style.visibility = "hidden";
-        canvas.width = 1920;
-        canvas.height = 1080;
+        canvas.width = window.screen.availWidth;
+        canvas.height = window.screen.availHeight;
         const ctx = canvas.getContext('2d');
 
         let v = Canvg.fromString(ctx, document.getElementById('svg').outerHTML); 
