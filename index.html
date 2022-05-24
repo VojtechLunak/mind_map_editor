@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Mind Map KAJ
+    </title>
+    <script type="module" src="main.js"></script>
+    <link id="styleBase" href="style.css" rel="stylesheet">
+</head>
+
+<body class="container">
+    
+    <nav>
+        <header>
+            Mind map editor - KAJ project
+        </header>
+        <button id="export">Export</button>
+        <button id="info_btn">Info</button>
+        <div id="placeholder"></div>
+    </nav>
+    <aside>
+        <button id="add_bubble">Add bubble</button> <br>
+        <button id="remove_all">Remove all bubbles</button> <br>
+        <button id="remove_bubble">Remove bubble</button> <br>
+        <button id="create_line">Create line</button> <br>
+        <button id="delete_line">Delete line</button>
+        <br>        
+        <input id="text_input" type="text" class="hidden"/>
+        <br> 
+        <button id="set_text" class="hidden">Set text</button>
+    </aside>
+    <div id="svg_container">
+    <svg id="svg" width="1500" height="755" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5" opacity="0.35"/>
+            </pattern>
+            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                <rect width="80" height="80" fill="url(#smallGrid)" />
+                <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1" opacity="0.2"/>
+            </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
+    </div>  
+    <br>
+    <footer>
+        Mind map editor - KAJ project by Vojtěch Luňák, ČVUT FEL SIT 2022
+    </footer>
+</body>
+
+</html>
