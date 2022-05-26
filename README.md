@@ -1,4 +1,4 @@
-# kaj_mind_map_editor
+# Mind map editor
 
 Mind Map editor JavaScript application created for KAJ. The web app allows user to create mind maps with basic tools: *Add/remove bubble*, *Add/delete connection between bubbles*, and *Set text*. User is also able to export created mind map in png or jpg file. Saving functionality is implemented as well.
 
