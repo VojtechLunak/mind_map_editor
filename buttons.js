@@ -158,6 +158,7 @@ class InfoButton extends Button {
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("activeText"));            
             document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
             document.querySelector("aside").classList.add("hiddenUnder");
+            document.getElementById("svg_container").classList.add("hiddenUnder");
             document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
             this._btn_elm.classList.add("activeText");
         } else {
@@ -169,6 +170,7 @@ class InfoButton extends Button {
                 document.querySelectorAll("button").forEach(b => b.classList.add("lower"));
                 document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
                 document.querySelector("aside").classList.add("hiddenUnder");
+                document.getElementById("svg_container").classList.add("hiddenUnder");
                 this._btn_elm.classList.add("activeText");
             }
             else if (infoSelected) {
@@ -177,6 +179,7 @@ class InfoButton extends Button {
                 this._btn_elm.classList.remove("activeText");
                 document.querySelectorAll("button").forEach(b => b.classList.remove("middle"));
                 document.querySelectorAll("button").forEach(b => b.classList.remove("lower"));
+                document.getElementById("svg_container").classList.remove("hiddenUnder");
                 document.querySelector("aside").classList.remove("hiddenUnder");
             }            
         }

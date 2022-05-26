@@ -51,7 +51,7 @@ aside {
 }
 
 .hiddenUnder {
-    z-index: -1;
+    z-index: -5;
 }
 
 aside * {
@@ -101,7 +101,7 @@ button[title]:hover::after {
     border-radius: 5px;
     border: 2px rgb(255, 201, 101) solid;
     transition: all 500ms ease-in-out;
-    animation: normal popup 0.5s;
+    animation: normal popup 0.4s;
 }
 
 button.lower[title]:hover::after {
@@ -114,7 +114,7 @@ button.lower[title]:hover::after {
     background-color: wheat;
     border-radius: 5px;
     border: 2px rgb(255, 201, 101) solid;
-    animation: normal popup 0.5s;
+    animation: normal popup 0.4s;
 }
 
 button.middle[title]:hover::after {
@@ -127,7 +127,7 @@ button.middle[title]:hover::after {
     background-color: wheat;
     border-radius: 5px;
     border: 2px rgb(255, 201, 101) solid;
-    animation: normal popup 0.5s;
+    animation: normal popup 0.4s;
 }
 
 @keyframes popup {
@@ -157,6 +157,7 @@ p#info {
     z-index: 2;
     line-height: 18px;
     width: 90%;
+    box-shadow: 8px 6px rgb(0, 0, 0,0.25);
     background-color: rgb(245, 222, 179, 1);
     animation-name: infoParagraphSlide;
     animation-duration: 1.5s;
@@ -211,4 +212,14 @@ select {
     border-radius: 8px;
     font-size:small;
     font-weight: 600;
+}
+
+#set_text, #text_input {    
+    transition: all 0.5s;
+    animation: normal fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0;}
+    to {opacity: 1;}
 }
