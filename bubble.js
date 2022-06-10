@@ -7,12 +7,14 @@ export default class Bubble {
     _bubble_elm;
     _text_elm;
     _selected;
+    _color;
     
     constructor(bubbleEl) {
         this._bubble_elm = bubbleEl;
         this._selected = false;
         this._text_elm = document.getElementById("text_" + this.id);
         this.calibrateText();
+        this._color = "none";
         //firstElementChild is the ellipse
         this._bubble_elm.addEventListener('dblclick', this._handleDoubleClick);
         this._bubble_elm.addEventListener('click', e => e.stopPropagation());
@@ -47,24 +49,75 @@ export default class Bubble {
 
     select() {
         this._selected = true;
-        document.getElementById("text_input").classList.remove("hidden");
-        document.getElementById("set_text").classList.remove("hidden");
+        document.getElementById("selected_container").classList.remove("hidden");
         console.log("selected " + this.id)
         this.element.setAttribute('opacity', 0.45);
         this.setAttribute('fill', 'lightgreen');
+        switch (this._color) {
+            case "none": document.getElementById("none").checked = true;
+                break;            
+            case "blue": document.getElementById("blue").checked = true;
+                break;
+            case "yellow": document.getElementById("yellow").checked = true;
+                break;
+            case "green": document.getElementById("green").checked = true;
+                break;        
+        }
     }
 
-    unselect() {
+    unselect(bubbleId = "") {
         this._selected = false;
-        document.getElementById("text_input").classList.add("hidden");
-        document.getElementById("set_text").classList.add("hidden");
-        this.element.setAttribute('opacity', 1);
-        this.setAttribute('fill', 'transparent');
-        document.getElementById("text_input").value = '';    
+        document.getElementById("selected_container").classList.add("hidden");
+        document.getElementById("text_input").value = '';
+        if (this._color === "none") {
+            this.element.setAttribute('opacity', 1);
+            this.setAttribute('fill', 'transparent');            
+        }
+       
+        if (bubbleId === this.id)  {   
+            if (document.getElementById("none").checked)
+                this._color = "none";
+            if (document.getElementById("blue").checked) {
+                this._color = "blue";
+                this.setAttribute('fill', 'blue');
+                this.setAttribute("opacity", 0.5);
+            }
+            if (document.getElementById("yellow").checked) {
+                this._color = "yellow";
+                this.setAttribute("fill", "yellow");
+                this.setAttribute("opacity", 0.5);
+            }
+            if (document.getElementById("green").checked) {
+                this._color = "green";
+                this.setAttribute("fill", "green");
+                this.setAttribute("opacity", 0.5);
+            }
+        }
     }
 
     setText(text) {
         this._text_elm.textContent = text;
+    }
+
+    recolorize = () => {
+        switch (this._color) {
+            case "none":
+                this.element.setAttribute('opacity', 1);
+                this.setAttribute('fill', 'transparent');           
+                break;            
+            case "blue":
+                this.setAttribute('fill', 'blue');
+                this.setAttribute("opacity", 0.5);
+                break;
+            case "yellow":
+                this.setAttribute("fill", "yellow");
+                this.setAttribute("opacity", 0.5);
+                break;
+            case "green":
+                this.setAttribute("fill", "green");
+                this.setAttribute("opacity", 0.5);
+                break;        
+        }
     }
 
     _handleDoubleClick = (e) => {
@@ -76,6 +129,9 @@ export default class Bubble {
     }
     
 
+    /**
+     *  Returns the ellipse element
+     */
     get element() {return this._bubble_elm.firstElementChild;}
 
     get isSelected() {return this._selected;}
@@ -89,6 +145,8 @@ export default class Bubble {
     get cy() {return this._bubble_elm.firstElementChild.getAttribute('cy');}
     
     get ry() {return this._bubble_elm.firstElementChild.getAttribute('ry');}
+    
+    get color() {return this._color;}
 }
 
 
@@ -129,21 +187,31 @@ class BubbleManager {
         return tempMax + 1;
     }
 
-    getSelectedBubble() {
+    getSelectedBubble = () => {
         return this._bubbles.find(b => b.isSelected);
     }
 
-    unselectAll(e = null) {
-        e && e.preventDefault();        
-        this._bubbles && this._bubbles.forEach(b => b.unselect());
+    unselectAll = (e = null) => {
+        e && e.preventDefault();
+        const selected = this._bubbles.find(b => b.isSelected == true);
+        let id = "";
+        if (selected) id = selected.id; 
+        this._bubbles && this._bubbles.forEach(b => b.unselect(id));
+        this.recolorize();
+    }
+
+    recolorize = () => {
+        this._bubbles.forEach(b => b.recolorize());
     }
 
     removeEventListenerForAllBubbles(evtType, handler) {
         this.unselectAll();
         this._bubbles.forEach(b => {
             b.element.removeEventListener(evtType, handler);
-            b.setAttribute('opacity', 1);
-            b.setAttribute('fill', 'transparent');
+            if (b._color === "none") {
+                b.setAttribute('opacity', 1);
+                b.setAttribute('fill', 'transparent');
+            }
         });
     }
 }

@@ -27,9 +27,20 @@
         <button id="create_line" title="Select two bubbles to connect with line.">Create line</button> <br>
         <button id="delete_line" title="Select two bubbles to disconnect.">Delete line</button>
         <br>       
-        <input id="text_input" type="text" class="hidden"/>
+        <div id="selected_container" class="hidden">
+        <input id="text_input" type="text"/>
         <br> 
-        <button id="set_text" class="hidden" title="Sets the text in from the input to the selected bubble.">Set text</button>
+        <button id="set_text" title="Sets the text in from the input to the selected bubble.">Set text</button>
+        <br>
+          <input type="radio" id="none" name="radio" value="none">
+          <label for="none">None</label><br>
+          <input type="radio" id="green" name="radio" value="green">
+          <label for="green">Green 🟢</label><br>
+          <input type="radio" id="blue" name="radio" value="blue">
+          <label for="blue">Blue 🔵</label><br>
+          <input type="radio" id="yellow" name="radio" value="yellow">
+          <label for="yellow">Yellow 🟡</label> 
+        </div>
     </aside>
     <div id="svg_container">
     <svg id="svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">

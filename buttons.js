@@ -349,7 +349,7 @@ class SetTextButton extends BubbleManagingButton {
 
         const textInput = document.getElementById("text_input");
         selectedBubble.setText(textInput.value);
-        selectedBubble.unselect();
+        selectedBubble.unselect(selectedBubble.id);
     }
 }
 
@@ -445,6 +445,7 @@ class CreateLineButton extends BubbleManagingButton {
         this._lineGenerator.addLineBetween(this._firstSelectedBubble.id, e.target.getAttribute('id'));
         this._bubbleManager.removeEventListenerForAllBubbles('click', this._secondClickOnAnotherBubble);
         this._bubbleManager.removeEventListenerForAllBubbles('click', playError);
+        this._bubbleManager.recolorize();
     }
 }
 
