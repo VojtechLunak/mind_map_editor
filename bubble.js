@@ -14,7 +14,8 @@ export default class Bubble {
         this._selected = false;
         this._text_elm = document.getElementById("text_" + this.id);
         this.calibrateText();
-        this._color = "none";
+        this._color = this.getAttribute("fill");
+        if (this._color === "transparent") this._color = "none";
         //firstElementChild is the ellipse
         this._bubble_elm.addEventListener('dblclick', this._handleDoubleClick);
         this._bubble_elm.addEventListener('click', e => e.stopPropagation());
